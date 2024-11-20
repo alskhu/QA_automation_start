@@ -1,0 +1,24 @@
+PUT https://crudcrud.com/api/5169422c8a41447baa320c8c89a7e9cf/student/673e56d600892d03e8b4d28d
+Content-Type: application/json
+
+{
+"name": "Dima Ivanov",
+"grade": 2
+}
+
+###
+DELETE https://crudcrud.com/api/5169422c8a41447baa320c8c89a7e9cf/student/673e432600892d03e8b4d27f
+Accept: application/json
+
+###
+GET https://crudcrud.com/api/5169422c8a41447baa320c8c89a7e9cf/student/673e56d600892d03e8b4d28d
+Accept: application/json
+
+###
+POST https://crudcrud.com/api/5169422c8a41447baa320c8c89a7e9cf/student
+Content-Type: application/json
+
+{
+  "name": "Ivan Ivanov",
+  "grade": 2
+}
