@@ -5,11 +5,13 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import org.apache.http.HttpStatus;
 import org.example.API.UnicornRequest;
+import org.example.API.models.Unicorn;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
 
 public class SimpleTest {
@@ -21,18 +23,15 @@ public class SimpleTest {
 
     @Test
     public void UserShouldBeCreateUnicorn() {
-        UnicornRequest.createUnicorn("{\n" +
-                "  \"name\": \"unicorn1\",\n" +
-                "  \"color\": \"red\"\n" +
-                "}");
+
+        Unicorn unicorn = new Unicorn("unicorn1", "brown");
+        UnicornRequest.createUnicorn(unicorn.toJson());
     }
 
     @Test
     public void UserShouldBeAbleDeleteExistingUnicorn() {
-        String id = UnicornRequest.createUnicorn("{\n" +
-                "  \"name\": \"unicorn2\",\n" +
-                "  \"color\": \"yellow\"\n" +
-                "}");
+        Unicorn unicorn = new Unicorn("unicorn2", "grey");
+        String id = UnicornRequest.createUnicorn(unicorn.toJson());
 
         UnicornRequest.deleteUnicorn(id);
 
@@ -45,23 +44,17 @@ public class SimpleTest {
 
     @Test
     public void UserShouldBeAbleEditExistingUnicorn() {
-        String id = UnicornRequest.createUnicorn("{\n" +
-                "  \"name\": \"unicorn3\",\n" +
-                "  \"color\": \"green\"\n" +
-                "}");
-        String expectedColor = "blue";
-        UnicornRequest.editUnicorn("{\n" +
-                "  \"name\": \"unicorn3\",\n" +
-                "  \"color\": \"" + expectedColor + "\" \n" +
-                "}", id);
+        Unicorn unicorn = new Unicorn("unicorn3", "green");
+        String id = UnicornRequest.createUnicorn(unicorn.toJson());
+        Unicorn unicornUpdated = new Unicorn("unicorn3", "blue");
+        UnicornRequest.editUnicorn(unicornUpdated.toJson(),id);
 
         when()
                 .get("/unicorn/" + id)
-                .then()
+        .then()
                 .assertThat()
-                .extract()
-                .path("color")
-                .equals(expectedColor);
+                .statusCode(200)
+                .body("color", equalTo(unicornUpdated.getColor()));
 
     }
 
