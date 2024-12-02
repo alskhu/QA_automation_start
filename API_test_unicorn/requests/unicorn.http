@@ -1,0 +1,24 @@
+PUT https://crudcrud.com/api/e6771bfc496c4db3b6bf9b116e7a8689/unicorn/674e0ea129ef8a03e8f2692c
+Content-Type: application/json
+
+{
+  "name": "unicorn1",
+  "color": "blue"
+}
+
+###
+DELETE https://crudcrud.com/api/e6771bfc496c4db3b6bf9b116e7a8689/unicorn/674e0ea129ef8a03e8f2692c
+Accept: application/json
+
+###
+GET https://crudcrud.com/api/e6771bfc496c4db3b6bf9b116e7a8689/unicorn/674e0ea129ef8a03e8f2692c
+Accept: application/json
+
+###
+POST https://crudcrud.com/api/e6771bfc496c4db3b6bf9b116e7a8689/unicorn
+Content-Type: application/json
+
+{
+  "name": "unicorn1",
+  "color": "red"
+}
