@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
 import org.example.API.models.Unicorn;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.both;
 import static org.hamcrest.Matchers.hasKey;
 
 public class UnicornRequest {
-    public static Unicorn createUnicorn(Unicorn unicorn) {
+    public static String createUnicorn(Unicorn unicorn) {
         String unicornJson = null;
         try {
             unicornJson = new ObjectMapper().writeValueAsString(unicorn);
@@ -27,7 +26,7 @@ public class UnicornRequest {
                 .assertThat()
                 .statusCode(201)
                 .body("$",hasKey("_id"))
-                .extract().as(Unicorn.class, ObjectMapperType.GSON);
+                .extract().path("_id");
     }
 
     public static void deleteUnicorn(String id) {

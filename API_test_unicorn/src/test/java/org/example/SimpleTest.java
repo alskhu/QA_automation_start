@@ -8,7 +8,6 @@ import org.example.API.UnicornRequest;
 import org.example.API.models.Unicorn;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
@@ -23,20 +22,19 @@ public class SimpleTest {
 
     @Test
     public void UserShouldBeCreateUnicorn() {
-
-        Unicorn unicorn = new Unicorn("unicorn1", "brown");
+        Unicorn unicorn = Unicorn.builder().name("unicorn1").color("brown").build();
         UnicornRequest.createUnicorn(unicorn);
     }
 
     @Test
     public void UserShouldBeAbleDeleteExistingUnicorn() {
-        Unicorn unicorn = new Unicorn("unicorn2", "grey");
-        Unicorn createdUnicorn = UnicornRequest.createUnicorn(unicorn);
+        Unicorn unicorn = Unicorn.builder().name("unicorn2").color("grey").build();
+        String id = UnicornRequest.createUnicorn(unicorn);
 
-        UnicornRequest.deleteUnicorn( createdUnicorn.getId());
+        UnicornRequest.deleteUnicorn( id);
 
         when()
-                .get("/unicorn/" + createdUnicorn.getId())
+                .get("/unicorn/" + id)
         .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NOT_FOUND);
@@ -44,13 +42,13 @@ public class SimpleTest {
 
     @Test
     public void UserShouldBeAbleEditExistingUnicorn() {
-        Unicorn unicorn = new Unicorn("unicorn3", "green");
-        Unicorn createdunicorn = UnicornRequest.createUnicorn(unicorn);
-        Unicorn unicornUpdated = new Unicorn("unicorn3", "blue");
-        UnicornRequest.editUnicorn(unicornUpdated, createdunicorn.getId());
+        Unicorn unicorn = Unicorn.builder().name("unicorn3").color("green").build();
+        String id = UnicornRequest.createUnicorn(unicorn);
+        Unicorn unicornUpdated = Unicorn.builder().name("unicorn3").color("blue").build();
+        UnicornRequest.editUnicorn(unicornUpdated, id);
 
         when()
-                .get("/unicorn/" + createdunicorn.getId())
+                .get("/unicorn/" + id)
         .then()
                 .assertThat()
                 .statusCode(200)
