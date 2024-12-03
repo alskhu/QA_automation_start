@@ -18,25 +18,25 @@ public class SimpleTest {
     @BeforeAll
     public static void setupTests() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.baseURI = "https://crudcrud.com/api/e6771bfc496c4db3b6bf9b116e7a8689";
+        RestAssured.baseURI = "https://crudcrud.com/api/06b7a6e0cc3d45c2ba446d581dd188d9";
     }
 
     @Test
     public void UserShouldBeCreateUnicorn() {
 
         Unicorn unicorn = new Unicorn("unicorn1", "brown");
-        UnicornRequest.createUnicorn(unicorn.toJson());
+        UnicornRequest.createUnicorn(unicorn);
     }
 
     @Test
     public void UserShouldBeAbleDeleteExistingUnicorn() {
         Unicorn unicorn = new Unicorn("unicorn2", "grey");
-        String id = UnicornRequest.createUnicorn(unicorn.toJson());
+        Unicorn createdUnicorn = UnicornRequest.createUnicorn(unicorn);
 
-        UnicornRequest.deleteUnicorn(id);
+        UnicornRequest.deleteUnicorn( createdUnicorn.getId());
 
         when()
-                .get("/unicorn/" + id)
+                .get("/unicorn/" + createdUnicorn.getId())
         .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NOT_FOUND);
@@ -45,12 +45,12 @@ public class SimpleTest {
     @Test
     public void UserShouldBeAbleEditExistingUnicorn() {
         Unicorn unicorn = new Unicorn("unicorn3", "green");
-        String id = UnicornRequest.createUnicorn(unicorn.toJson());
+        Unicorn createdunicorn = UnicornRequest.createUnicorn(unicorn);
         Unicorn unicornUpdated = new Unicorn("unicorn3", "blue");
-        UnicornRequest.editUnicorn(unicornUpdated.toJson(),id);
+        UnicornRequest.editUnicorn(unicornUpdated, createdunicorn.getId());
 
         when()
-                .get("/unicorn/" + id)
+                .get("/unicorn/" + createdunicorn.getId())
         .then()
                 .assertThat()
                 .statusCode(200)
